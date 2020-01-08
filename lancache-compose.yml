@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  lancache-dns:
+  	image: lancachenet/lancache-dns:latest
+  	environment:
+  		- USE_GENERIC_CACHE=true
+  		- LANCACHE_IP=${HOST_IP}
+  	ports:
+  		- 53:53/udp
+  lancache:
+  	image: lancachenet/monolithic:latest
+  	volumes:
+  		- /home/lancache/cache/logs:/data/logs
+  		- /home/lancache/cache/data:/data/cache
+  	ports:
+  		- 80:80
+  sniproxy:
+  	image: lancachenet/sniproxy:latest
+  	ports:
+  		- 443:443
+  	restart: unless-stopped
