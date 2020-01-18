@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  lancache-dns:
+    container_name: lancache-dns
+    image: lancachenet/lancache-dns:latest
+    ports:
+      - ${DNS_IP}:53:53/udp
+  lancache:
+    container_name: lancache
+    image: lancachenet/monolithic:latest
+    volumes:
+      - ${CACHE_ROOT}:/data/logs
+      - ${CACHE_ROOT}:/data/cache
+    ports:
+      - ${LANCACHE_IP}:80:80
+  sniproxy:
+    container_name: sniproxy
+    image: lancachenet/sniproxy:latest
+    ports:
+      - ${LANCACHE_IP}:443:443
+    restart: unless-stopped
